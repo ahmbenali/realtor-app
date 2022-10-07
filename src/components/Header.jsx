@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Header() {
 	const location = useLocation();
-	console.log('pathname: ', location.pathname);
+	// console.log('pathname: ', location.pathname);
 
 	const navigate = useNavigate();
 

@@ -1,7 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	updateProfile,
+} from 'firebase/auth';
 import { Link } from 'react-router-dom';
+import {toast} from 'react-toastify'
+
 import OAuth from '../components/OAuth';
+import { db } from '../firebase';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -10,15 +20,18 @@ export default function SignUp() {
 		email: '',
 		password: '',
 	});
+	const navigate = useNavigate();
 
 	const { name, email, password } = formData;
 
+	/*============================== Component FillEye ===============================*/
+	// component used to show and hide password via clicking the eye icon
 	const FillEye = () =>
 		showPassword ? (
 			<AiFillEyeInvisible
 				className='
               absolute right-3 top-3 text-xl cursor-pointer'
-				onClick={ev => setShowPassword(prevState => !prevState)}
+				onClick={() => setShowPassword(prevState => !prevState)}
 			/>
 		) : (
 			<AiFillEye
@@ -55,6 +68,33 @@ export default function SignUp() {
 		},
 	];
 
+	/*============================== Event handler  ===============================*/
+	const onSubmit = async ev => {
+		ev.preventDefault();
+
+		try {
+			const auth = getAuth();
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			const { user } = userCredential;
+			// console.log('USER: ', user);
+			updateProfile(auth.currentUser, { displayName: name });
+
+			const formDataCopy = { ...formData };
+			delete formDataCopy.password;
+			formDataCopy.timestamp = serverTimestamp();
+
+			await setDoc(doc(db, 'users', user.uid), formDataCopy);
+      toast.success('Sign up was successful')
+			navigate('/');
+		} catch (error) {
+			toast.error('Something went wrong with the registration ');
+		}
+	};
+
 	return (
 		<section>
 			<h1 className='text-3xl text-center mt-6 font-bold'>Sign Up</h1>
@@ -70,7 +110,7 @@ export default function SignUp() {
 					/>
 				</div>
 				<div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-					<form>
+					<form onSubmit={onSubmit}>
 						{inputs.map(input => {
 							const {
 								type,
@@ -82,9 +122,8 @@ export default function SignUp() {
 								children,
 							} = input;
 							return (
-								<div className={className}>
+								<div key={id} className={className}>
 									<input
-										key={id}
 										className='w-full px-4 py-2 text-xl text-gray-700 mb-6
                                               bg-white border-gray-300 rounded transition ease-in-out'
 										type={type}
@@ -103,7 +142,7 @@ export default function SignUp() {
 								</div>
 							);
 						})}
-						<dv className='flex justify-between whitespace-nowrap text-sm sm:text-lg'>
+						<div className='flex justify-between whitespace-nowrap text-sm sm:text-lg'>
 							<p className='mb-6'>
 								Have a account?{' '}
 								<Link
@@ -121,7 +160,7 @@ export default function SignUp() {
 							>
 								Forgot password?
 							</Link>
-						</dv>
+						</div>
 						<button
 							className='w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium 
           uppercase rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out
