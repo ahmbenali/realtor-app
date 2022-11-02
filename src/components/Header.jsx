@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { stylesImages } from '../tool-kits/stylesData';
 
 export default function Header() {
 	const location = useLocation();
@@ -8,18 +9,18 @@ export default function Header() {
 
 	const pathMatchRoute = route => route === location.pathname;
 
-	const links = [
+	const LINKS = [
 		{ name: 'Home', path: '/' },
 		{ name: 'Offers', path: '/offers' },
 		{ name: 'Sign In', path: '/sign-in' },
 	];
 
 	return (
-		<div className='bg-white border-b shadow-sm  sticky top-0 z-50'>
+		<div className='bg-white border-b shadow-sm py-3 sticky top-0 z-50'>
 			<header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
 				<div>
 					<img
-						src='https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg'
+						src={stylesImages.logoImg}
 						alt='logo'
 						className='h-5 cursor-pointer'
 						onClick={ev => navigate('/')}
@@ -27,10 +28,10 @@ export default function Header() {
 				</div>
 				<div>
 					<ul className='flex  space-x-10'>
-						{links.map(({ name, path }) => (
+						{LINKS.map(({ name, path }) => (
 							<li
 								key={name}
-								className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]
+								className={`cursor-pointer text-sm font-semibold text-gray-400 border-b-[3px]
                border-b-transparent ${
 									pathMatchRoute(path) && 'text-black border-b-red-500'
 								}`}

@@ -1,19 +1,21 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: 'AIzaSyDOb956ZCHuAUekYYP23rpr3yUh1HJmxRA',
-	authDomain: 'realtor-app-a0f59.firebaseapp.com',
-	projectId: 'realtor-app-a0f59',
-	storageBucket: 'realtor-app-a0f59.appspot.com',
-	messagingSenderId: '975299590325',
-	appId: '1:975299590325:web:ff66836818d9a00896e6fc',
+  apiKey: "AIzaSyASkRjp4evWf9H1r2E1VaPJlEfZEmRb7qg",
+  authDomain: "realtor-proj.firebaseapp.com",
+  projectId: "realtor-proj",
+  storageBucket: "realtor-proj.appspot.com",
+  messagingSenderId: "928983268605",
+  appId: "1:928983268605:web:6122167208f67119b95294"
 };
+
+// Initialize Firebase
+// const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
 export const db = getFirestore()
+
+

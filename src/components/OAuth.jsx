@@ -7,7 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 export default function OAuth() {
 	const navigate = useNavigate();
-	
+
+	const className = `flex items-center justify-center w-full bg-red-700
+    text-white px-7 py-3 uppercase text-sm font-medium rounded hover:bg-red-800
+    active:bg-red-900 shadow-md hover:shadow-lg active:shadow-lg`;
+
+	/*============================== Start events handlers ===============================*/
+
 	const onGoogleClick = async () => {
 		try {
 			const auth = getAuth();
@@ -27,20 +33,20 @@ export default function OAuth() {
 					timestamp: serverTimestamp(),
 				});
 			}
-			navigate('/')
+			navigate('/');
 		} catch (error) {
 			toast.error('Could not authorize with Google');
 			console.log('ERROR: ', error);
 		}
 	};
+	/*============================== End events handlers ===============================*/
 
 	return (
 		<button // this button is inside the form -> will be submitted too
 			type='button' // to prevent submitting, per default button has type submit ??
 			onClick={onGoogleClick}
-			className='flex items-center justify-center w-full bg-red-700
-    text-white px-7 py-3 uppercase text-sm font-medium hover:bg-red-800
-    active:bg-red-900 shadow-md hover:shadow-lg active:shadow-lg'
+			className={`${className}`}
+	
 		>
 			<FcGoogle className='text-2xl bg-white rounded-full mr-2' />
 			Continue with Google
