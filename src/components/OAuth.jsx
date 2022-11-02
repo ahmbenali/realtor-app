@@ -13,40 +13,46 @@ export default function OAuth() {
     active:bg-red-900 shadow-md hover:shadow-lg active:shadow-lg`;
 
 	/*============================== Start events handlers ===============================*/
-
-	const onGoogleClick = async () => {
+	async function handleGoogleClick() {
+		// sign in with pop up return a promise
 		try {
 			const auth = getAuth();
+			// create the provider
 			const provider = new GoogleAuthProvider();
 			const result = await signInWithPopup(auth, provider);
-			const user = result.user;
-			// console.log('USER: ', user);
+			const { user } = result;
+			console.log('USER: ', user);
 
-			// check for the user
+			// check for the user --> create an address docRef to compare it with others in db collection
+			// doc method has 3 parameters: db, collection and uid
 			const docRef = doc(db, 'users', user.uid);
-			const docSnap = await getDoc(docRef);
+			const docSnap = await getDoc(docRef); // check wether a document with uid
+			// exists in the collection users --> save it in docSnap
 
-			if (!docSnap.exists()) {
+			if (!docSnap.exists) {
+				// insert new user in the collection
 				await setDoc(docRef, {
 					name: user.displayName,
 					email: user.email,
 					timestamp: serverTimestamp(),
 				});
 			}
-			navigate('/');
+			// after signing up redirect the user to the home page
+			navigate('/');  
 		} catch (error) {
 			toast.error('Could not authorize with Google');
-			console.log('ERROR: ', error);
+			console.log('ERROR: ',error);
 		}
-	};
+	}
+
 	/*============================== End events handlers ===============================*/
 
 	return (
-		<button // this button is inside the form -> will be submitted too
-			type='button' // to prevent submitting, per default button has type submit ??
-			onClick={onGoogleClick}
+		<button // this button is defined inside the form (see SignUp.jsx)
+			//  -> will be submitted too, because button has per default type submit
+			type='button' // change type of button to prevent submitting
+			onClick={handleGoogleClick} // handle onClick event instead of form submitting
 			className={`${className}`}
-	
 		>
 			<FcGoogle className='text-2xl bg-white rounded-full mr-2' />
 			Continue with Google
