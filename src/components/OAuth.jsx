@@ -29,7 +29,7 @@ export default function OAuth() {
 			const docSnap = await getDoc(docRef); // check wether a document with uid
 			// exists in the collection users --> save it in docSnap
 
-			if (!docSnap.exists) {
+			if (!docSnap.exists()) {
 				// insert new user in the collection
 				await setDoc(docRef, {
 					name: user.displayName,

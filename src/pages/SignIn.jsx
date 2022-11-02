@@ -83,7 +83,7 @@ export default function SignIn() {
 
 	/*============================== Start events handlers ===============================*/
 
-	const handleFormSubmit = async ev => {
+	async function handleFormSubmit(ev) {
 		ev.preventDefault(); // prevent browser from refreshing
 
 		try {
@@ -94,13 +94,13 @@ export default function SignIn() {
 				password
 			);
 			console.log('USER: ', userCredential.user);
-			if (userCredential.user) {
+			if (userCredential.user) { // if user exists --> redirect him to hompe page
 				navigate('/');
 			}
-		} catch (error) {
+		} catch (error) { // otherwise he get an error
 			toast.error('Bad user credentials');
 		}
-	};
+	}
 
 	// change states over controlled inputs (email and password)
 	const handleFormChange = ev =>
@@ -126,16 +126,19 @@ export default function SignIn() {
       px-6 py-12 max-w-6xl mx-auto'
 			>
 				<div className='md:w-[67%] lg:w-[50%] mb-12 md:mb-6 '>
-					<img className='w-full rounded-2xl' src={stylesImages.keyImg} alt='key' />
+					<img
+						className='w-full rounded-2xl'
+						src={stylesImages.keyImg}
+						alt='key'
+					/>
 				</div>
 				<div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
 					<form onSubmit={handleFormSubmit}>
-
 						{/* Mapping over input fields to create form inputs  */}
 						{inputFields.map(input => {
 							const { type, id, value, placeholder, className, children } =
 								input;
-							
+
 							return (
 								<div key={id} className={className}>
 									<Input
