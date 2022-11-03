@@ -2,14 +2,15 @@ import { getAuth, updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 import { db } from '../firebase';
 import Input from '../tool-kits/Input';
 
 export default function Profile() {
 	const auth = getAuth();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
+	const [changeDetail, setChangeDetails] = useState(false);
 
 	const [formData, setFormData] = useState({
 		// name: 'Ahmed', // data should later come from database
@@ -22,20 +23,26 @@ export default function Profile() {
 
 	/*============================== classes names ===============================*/
 
-	const classes = {};
+	const classes = {
+		spanClass: `text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer
+									`,
+		signoutClass:
+			'text-blue-600 hover:text-blue-800 cursor-pointer transition duration-200e ease-in-out',
+	};
+
+	const { spanClass, signoutClass } = classes;
 
 	/*============================== Start Event handler  ===============================*/
 
-	const handleFormSubmit = async ev => {
-		ev.preventDefault(); // prevent browser from refreshing
+	const handleFormSubmit = async () => {
 		try {
 			if (auth.currentUser.displayName !== name) {
-				// update display name in firebase auth
+				// update display name in firebase authentication
 				await updateProfile(auth.currentUser, {
 					displayName: name,
 				});
 
-				// update name in firebase
+				// update name in firebase database
 				const docRef = doc(db, 'users', auth.currentUser.uid);
 				await updateDoc(docRef, { name });
 			}
@@ -53,10 +60,9 @@ export default function Profile() {
 		}));
 	};
 
-	const handleLogoutClick = ( name, email ) => {
-		auth.signOut()
-		navigate('/')
-		
+	const handleLogoutClick = (name, email) => {
+		auth.signOut();
+		navigate('/');
 	};
 
 	/*============================== End Event handler  ===============================*/
@@ -69,8 +75,8 @@ export default function Profile() {
 			id: 'name',
 			value: name,
 			placeholder: 'Full name',
-			className: '',
-			disabled: true,
+			className: changeDetail ? 'bg-red-200 focus:bg-red-200' : null,
+			disabled: !changeDetail,
 			children: null,
 		},
 		{
@@ -80,6 +86,7 @@ export default function Profile() {
 			value: email,
 			placeholder: 'Email address',
 			className: '',
+			disabled: true,
 			children: null,
 		},
 	];
@@ -93,8 +100,8 @@ export default function Profile() {
 
 				<div className='w-full md:w-[50%] mt-6 px-3'>
 					<form onSubmit={handleFormSubmit}>
-						{inputFields.map(input => {
-							const {
+						{inputFields.map(
+							({
 								type,
 								id,
 								value,
@@ -102,32 +109,37 @@ export default function Profile() {
 								disabled,
 								className,
 								children,
-							} = input;
-							return (
-								<div key={id} className={className}>
-									<Input
-										type={type}
-										id={id}
-										value={value}
-										disabled={disabled}
-										placeholder={placeholder}
-										onFormChange={handleInputChange}
-									/>
-									{children}
-								</div>
-							);
-						})}
+							}) => {
+								return (
+									<div key={id}>
+										<Input
+											type={type}
+											id={id}
+											value={value}
+											disabled={disabled}
+											placeholder={placeholder}
+											onInputChange={handleInputChange}
+											className={className}
+										/>
+										{children}
+									</div>
+								);
+							}
+						)}
 						<div className='flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6'>
 							<p className='flex items-center  '>
 								Do you want to change your name?
-								<span className='text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer'>
-									Edit
+								<span
+									onClick={() => {
+										changeDetail && handleFormSubmit();
+										setChangeDetails(prevState => !prevState);
+									}}
+									className={spanClass}
+								>
+									{!changeDetail ? 'Edit' : 'Apply changes'}
 								</span>
 							</p>
-							<p
-								onClick={handleLogoutClick}
-								className='text-blue-600 hover:text-blue-800 cursor-pointer transition duration-200e ease-in-out'
-							>
+							<p onClick={handleLogoutClick} className={signoutClass}>
 								Sign out
 							</p>
 						</div>

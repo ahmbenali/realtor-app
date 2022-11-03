@@ -1,18 +1,27 @@
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { stylesImages } from '../tool-kits/stylesData';
 
 export default function Header() {
 	const location = useLocation();
 	// console.log('pathname: ', location.pathname);
-
+	const [pageState, setPageState] = useState('Sign in');
 	const navigate = useNavigate();
-
+	const auth = getAuth();
 	const pathMatchRoute = route => route === location.pathname;
+
+	useEffect(() => {
+		// update pageState in authentication
+		onAuthStateChanged(auth, user =>
+			setPageState(user ? 'Profile' : 'Sign in')
+		);
+	}, [auth]);
 
 	const LINKS = [
 		{ name: 'Home', path: '/' },
 		{ name: 'Offers', path: '/offers' },
-		{ name: 'Sign In', path: '/sign-in' },
+		{ name: pageState, path: auth.currentUser ? '/profile' : '/sign-in' },
 	];
 
 	return (
@@ -40,10 +49,6 @@ export default function Header() {
 								{name}
 							</li>
 						))}
-
-						{/* <li>Home</li>
-						<li>Offers</li>
-						<li>Sign in</li> */}
 					</ul>
 				</div>
 			</header>
