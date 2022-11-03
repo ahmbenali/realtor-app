@@ -8,7 +8,7 @@ export default function useAuthStatus() {
 	// ask firebase if user is authenticated or not --> user is signing in
 	useEffect(() => {
 		const auth = getAuth();
-		console.log('AUTH: ', auth);
+		// console.log('AUTH: ', auth);
 
 		onAuthStateChanged(auth, user => {
 			if (user) setLoggedIn(true); // user exists(signed in)

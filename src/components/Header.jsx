@@ -24,8 +24,8 @@ export default function Header() {
 		{ name: pageState, path: auth.currentUser ? '/profile' : '/sign-in' },
 	];
 
-	return (
-		<div className='bg-white border-b shadow-sm py-3 sticky top-0 z-50'>
+	return ( // for spinner z-50 -->to be over header
+		<div className='bg-white border-b shadow-sm py-3 sticky top-0 z-40'>
 			<header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
 				<div>
 					<img

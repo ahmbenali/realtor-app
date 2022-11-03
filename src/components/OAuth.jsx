@@ -21,7 +21,7 @@ export default function OAuth() {
 			const provider = new GoogleAuthProvider();
 			const result = await signInWithPopup(auth, provider);
 			const { user } = result;
-			console.log('USER: ', user);
+			// console.log('USER: ', user);
 
 			// check for the user --> create an address docRef to compare it with others in db collection
 			// doc method has 3 parameters: db, collection and uid
