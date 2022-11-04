@@ -2,10 +2,12 @@ import { getAuth, updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FcHome } from 'react-icons/fc';
 
 import { db } from '../firebase';
 import Input from '../tool-kits/Input';
+import Button from '../tool-kits/Button';
 
 export default function Profile() {
 	const auth = getAuth();
@@ -21,16 +23,18 @@ export default function Profile() {
 
 	const { name, email } = formData;
 
-	/*============================== classes names ===============================*/
+	/*============================== style classes names ===============================*/
 
 	const classes = {
 		spanClass: `text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer
 									`,
 		signoutClass:
 			'text-blue-600 hover:text-blue-800 cursor-pointer transition duration-200e ease-in-out',
+		btnClass: `w-full  bg-blue-600 text-white rounded px-7 py-3 font-medium uppercase
+						shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg`,
 	};
 
-	const { spanClass, signoutClass } = classes;
+	const { spanClass, signoutClass, btnClass } = classes;
 
 	/*============================== Start Event handler  ===============================*/
 
@@ -144,6 +148,19 @@ export default function Profile() {
 							</p>
 						</div>
 					</form>
+					<Button
+						className={btnClass}
+						type='submit'
+						children={
+							<Link
+								to='/create-listing'
+								className='flex justify-center items-center'
+							>
+								<FcHome className='mr-1 bg-red-200 border-2 rounded-full text-3xl p-1' />
+								Sell or rent your home
+							</Link>
+						}
+					/>
 				</div>
 			</section>
 		</>

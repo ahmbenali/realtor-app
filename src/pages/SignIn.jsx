@@ -34,9 +34,10 @@ export default function SignIn() {
           hover:shadow-lg active:bg-blue-800`,
 
 		eyeClass: `absolute right-3 top-3 text-xl cursor-pointer`,
-		btnClass: `w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium
-										uppercase rounded shadow-md hover:bg-blue-700 transition duration-150
-										ease-in-out hover:shadow-lg active:bg-blue-800`,
+		btnClass: `w-full  px-7 py-3 text-sm  uppercase rounded  transition duration-150
+										ease-in-out text-white
+		bg-blue-600  font-medium
+										shadow-md hover:bg-blue-700  hover:shadow-lg active:bg-blue-800`,
 	};
 	const {
 		signInClass,

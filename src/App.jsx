@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
+import CreateListing from './pages/CreateListing';
 import ForgotPassword from './pages/ForgotPassword';
 import Home from './pages/Home';
 import Offers from './pages/Offers';
@@ -12,10 +13,14 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 
 function App() {
+	const h1Class =
+		'text-5xl text-red-800 font-bold text-center mt-10  flex justify-center items-center';
+
+	/*============================== ui returned ===============================*/
 	return (
 		<>
 			<Router>
-			<Header />
+				<Header />
 				<Routes>
 					<Route path='/' element={<Home />} />
 					<Route path='/offers' element={<Offers />} />
@@ -25,7 +30,11 @@ function App() {
 						<Route path='/profile' element={<Profile />} />
 					</Route>
 					<Route path='/forgot-password' element={<ForgotPassword />} />
-					<Route path='*' element={<strong>Page Not Found</strong>} />
+					<Route path='/create-listing' element={<CreateListing />} />
+					<Route
+						path='*'
+						element={<h1 className={h1Class}>Sorry Page Not Found</h1>}
+					/>
 				</Routes>
 			</Router>
 			<ToastContainer
